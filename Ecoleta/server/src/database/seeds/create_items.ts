@@ -1,7 +1,7 @@
 import Knex from 'knex'
 
-export async function seed(kenx: Knex) {
-    await Knex('items').insert([
+export async function seed(knex: Knex) {
+    await knex('items').insert([
         {title: 'Lampadas', image: 'lampdas.svg'},
         {title: 'Pilhas e baterias', image: 'papeis-papelao.svg'},
         {title: 'Papéis e papelão', image: 'eletronicos.svg'},
