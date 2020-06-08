@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import PointsController from './controllers/pointsController'
-import ItemsController from './controllers/itemsController'
+import PointsController from './controllers/PointsController'
+import ItemsController from './controllers/ItemsController'
 
 const routes = Router()
 const pointsController = new PointsController()
