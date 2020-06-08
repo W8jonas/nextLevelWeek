@@ -1,7 +1,6 @@
 import knex from 'knex'
 import path from 'path'
 
-
 module.exports = {
     client: 'sqlite3',
     connection: {
