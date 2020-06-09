@@ -1,1 +1,7 @@
-#Repositores Next Level Week
+#Repositorios Next Level Week
+
+# Ecoleta
+-[ ] server
+-[ ] web
+-[ ] mobile
+-[ ] funcionalidade avançadas
