@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import Header from './Header'
+// import Home from './pages/home/index'
+import Routes from './routes'
 
 function App() {
   return (
-    <div>
-      <Header title="alo voce"/>
-      <h1> conteudo </h1>
-    </div>
+    <Routes/>
   );
 }
 
