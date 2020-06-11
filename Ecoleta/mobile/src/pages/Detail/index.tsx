@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 // import { Container } from './styles';
 
-const Detail = () => {
+const Detail: React.FC = () => {
   return <View />;
 }
 
