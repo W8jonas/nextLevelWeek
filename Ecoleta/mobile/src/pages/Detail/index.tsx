@@ -5,11 +5,15 @@ import Icon2 from 'react-native-vector-icons/FontAwesome'
 import { useNavigation } from "@react-navigation/native"
 import styles from './styles'
 import { RectButton } from 'react-native-gesture-handler'
-
+import api from '../../services/api'
 
 const Detail: React.FC = () => {
   const navigation = useNavigation()
-  
+
+  useEffect(()=>{}, [])
+
+  useEffect(()=>{}, [])
+    
   function handleNavigateBack() {
     navigation.goBack()
   }

@@ -5,15 +5,47 @@ import { useNavigation } from "@react-navigation/native"
 import MapboxGL from "@react-native-mapbox-gl/maps"
 import { SvgUri } from "react-native-svg"
 import styles from "./styles"
+import api from '../../services/api'
 
 const LINK = "http://192.168.2.2:3333/uploads/oleo.svg"
 
 MapboxGL.setAccessToken("pk.eyJ1Ijoidzhqb25hcyIsImEiOiJja2JkeTh1aGQwZ2FuMzFtejQ4YTllaWpyIn0.a-hfivoMwtrR8m8m09HeMg");
 MapboxGL.setConnected(true);
 
+
+interface Item {
+  id: number,
+  title: string,
+  image_url: string
+}
+
 const Points = () => {
   const navigation = useNavigation()
-  
+
+  const [items, setItems] = useState<Item[]>([])
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
+
+  useEffect(()=>{
+    api.get('items').then((response)=>{
+      setItems(response.data)
+    })
+  }, [])
+
+  useEffect(()=>{}, [])
+
+  useEffect(()=>{}, [])
+
+  function handleSelectItem(id: number) {
+    const alreadySelected = selectedItems.findIndex((item)=> item === id)
+
+    if (alreadySelected >= 0){
+        const filteredItems = selectedItems.filter(item => item !== id)
+        setSelectedItems(filteredItems)
+    }else {
+        setSelectedItems([...selectedItems, id])
+    }
+  }
+
   function handleNavigateBack() {
     navigation.goBack()
   }
@@ -73,42 +105,24 @@ const Points = () => {
       
       <View style={styles.itemsContainer}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <SvgUri width={42} height={42} uri={LINK}/>
-            <Text style={styles.itemTitle}> QUALQUER COISA </Text>
-          </TouchableOpacity>
+          {items.map((item)=> (
+            <TouchableOpacity
+              activeOpacity={0.5}
+              key={`${item.id}`} 
+              style={[
+                styles.item, 
+                selectedItems.includes(item.id) ? styles.selectedItem : {}
+              ]} 
+              onPress={()=>{handleSelectItem(item.id)}}
+            >
+              <SvgUri width={42} height={42} uri={item.image_url}/>
+              <Text style={styles.itemTitle}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
-
       </View>
     </>
   )
 }
-
-
 
 export default Points;
