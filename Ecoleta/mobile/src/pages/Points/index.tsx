@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from "@react-navigation/native";
-// import MapView from 'react-native-maps'
+import MapboxGL from "@react-native-mapbox-gl/maps";
+
+MapboxGL.setAccessToken("pk.eyJ1Ijoidzhqb25hcyIsImEiOiJja2JkeTh1aGQwZ2FuMzFtejQ4YTllaWpyIn0.a-hfivoMwtrR8m8m09HeMg");
+MapboxGL.setConnected(true);
 
 const Points = () => {
   const navigation = useNavigation()
@@ -10,6 +13,11 @@ const Points = () => {
   function handleNavigateBack() {
     navigation.goBack()
   }
+
+  useEffect(()=>{
+    MapboxGL.setTelemetryEnabled(false);
+  },[])
+
 
   return (
     <>
@@ -22,7 +30,22 @@ const Points = () => {
         <Text style={styles.description}>Encontre no mapa um ponto de coleta.</Text>
 
         <View style={styles.mapContainer}>
+
           {/* <MapView style={styles.map} /> */}
+
+          <MapboxGL.MapView style={styles.map}>
+            <MapboxGL.PointAnnotation
+              id='rocketseat'
+              coordinate={[-49.6446024, -27.2108001]}
+            >
+              <View style={styles.annotationContainer}>
+                <View style={styles.annotationFill} />
+              </View>
+              <MapboxGL.Callout title='Rocketseat House' />
+            </MapboxGL.PointAnnotation>
+
+          </MapboxGL.MapView>
+
         </View>
       </View>
       
@@ -67,6 +90,22 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+
+  annotationContainer: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  annotationFill: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#7159C1',
+    transform: [{ scale: 0.8 }],
   },
 
   mapMarker: {
