@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image } from 'react-native'
+import { View, TouchableOpacity, Text, ScrollView, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { useNavigation } from "@react-navigation/native"
 import MapboxGL from "@react-native-mapbox-gl/maps"
