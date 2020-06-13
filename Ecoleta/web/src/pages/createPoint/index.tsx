@@ -107,6 +107,7 @@ const CreatePoint = () => {
 
         if (alreadySelected >= 0){
             const filteredItems = selectedItems.filter(item => item !== id)
+            setSelectedItems(filteredItems)
         }else {
             setSelectedItems([...selectedItems, id])
         }
