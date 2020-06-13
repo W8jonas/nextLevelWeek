@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { useNavigation } from "@react-navigation/native"
 import MapboxGL from "@react-native-mapbox-gl/maps"
@@ -16,6 +16,10 @@ const Points = () => {
   
   function handleNavigateBack() {
     navigation.goBack()
+  }
+  
+  function handleNavigateToDetail() {
+    navigation.navigate('Detail')
   }
 
   useEffect(()=>{
@@ -47,12 +51,21 @@ const Points = () => {
             <MapboxGL.PointAnnotation
               id='rocketseat'
               coordinate={[-43.7993284, -20.6689314]}
+              onSelected={handleNavigateToDetail}
             >
-              <View style={styles.annotationContainer}>
+              {/* <View style={styles.annotationContainer}>
                 <View style={styles.annotationFill} />
+              </View> */}
+
+              <View style={styles.mapMarkerContainer}>
+                <Image style={styles.mapMarkerImage} source={{uri:'https://images.unsplash.com/photo-1592014876894-139779163b5a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'}} />
+                <Text style={styles.mapMarkerTitle}>
+                  Alo Você!
+                </Text>
               </View>
-              <MapboxGL.Callout title='Rocketseat House' />
+
             </MapboxGL.PointAnnotation>
+
           </MapboxGL.MapView>
 
         </View>
