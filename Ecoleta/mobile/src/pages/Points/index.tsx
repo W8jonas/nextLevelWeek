@@ -6,6 +6,7 @@ import MapboxGL from "@react-native-mapbox-gl/maps"
 import { SvgUri } from "react-native-svg"
 import styles from "./styles"
 import api from '../../services/api'
+// import Geolocation from '@react-native-community/geolocation';
 
 const LINK = "http://192.168.2.2:3333/uploads/oleo.svg"
 
@@ -18,12 +19,23 @@ interface Item {
   title: string,
   image_url: string
 }
+interface Point {
+  id: number,
+  name: string,
+  image: string,
+  latitude: number,
+  longitude: number,
+}
 
 const Points = () => {
   const navigation = useNavigation()
 
   const [items, setItems] = useState<Item[]>([])
+  const [points, setPoints] = useState<Point[]>([])
+
   const [selectedItems, setSelectedItems] = useState<number[]>([])
+  
+  const [initialPosition, setInitialPosition] = useState<number[]>([1, 0])
 
   useEffect(()=>{
     api.get('items').then((response)=>{
@@ -31,9 +43,28 @@ const Points = () => {
     })
   }, [])
 
-  useEffect(()=>{}, [])
+  useEffect(()=>{
+    api.get('points',{
+      params: {
+        city: 'lafaiete',
+        uf: "mg",
+        items: [1, 2, 3, 4, 5, 6]
+      }
+    }).then((response)=>{
+      console.log('response.data: ', response.data);
+      
+      setPoints(response.data)
+    })
+  }, [])
 
-  useEffect(()=>{}, [])
+  useEffect(()=>{
+    // const status = Geolocation.requestAuthorization()
+    // console.log(status);
+    
+    // Geolocation.getCurrentPosition(info => console.log(info));
+
+  }, [])
+
 
   function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex((item)=> item === id)
@@ -50,8 +81,8 @@ const Points = () => {
     navigation.goBack()
   }
   
-  function handleNavigateToDetail() {
-    navigation.navigate('Detail')
+  function handleNavigateToDetail(id: number) {
+    navigation.navigate('Detail', {point_id: id})
   }
 
   useEffect(()=>{
@@ -71,40 +102,43 @@ const Points = () => {
 
         <View style={styles.mapContainer}>
 
-          <MapboxGL.MapView 
+          {initialPosition[0] !== 0 &&
+            <MapboxGL.MapView 
             style={styles.map}
             styleURL={MapboxGL.StyleURL.Dark}
           >
             <MapboxGL.Camera 
               centerCoordinate={[-43.7971312, -20.6719389]}
-              zoomLevel={15}
+              zoomLevel={2}
             />
+            {points.map((point)=>(
+              <MapboxGL.MarkerView
+                key={`${point.id}`}
+                id='rocketseat'
+                coordinate={[point.latitude, point.longitude]}
+                onSelected={()=>handleNavigateToDetail(point.id)}
+              >
 
-            <MapboxGL.PointAnnotation
-              id='rocketseat'
-              coordinate={[-43.7993284, -20.6689314]}
-              onSelected={handleNavigateToDetail}
-            >
-              {/* <View style={styles.annotationContainer}>
-                <View style={styles.annotationFill} />
-              </View> */}
+                <View style={styles.mapMarkerContainer}>
+                  <Image style={styles.mapMarkerImage} source={{uri: point.image}} />
+                  <Text style={styles.mapMarkerTitle}>
+                    {point.name}
+                  </Text>
+                </View>
+              </MapboxGL.MarkerView>
+            ))}
 
-              <View style={styles.mapMarkerContainer}>
-                <Image style={styles.mapMarkerImage} source={{uri:'https://images.unsplash.com/photo-1592014876894-139779163b5a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80'}} />
-                <Text style={styles.mapMarkerTitle}>
-                  Alo Você!
-                </Text>
-              </View>
-
-            </MapboxGL.PointAnnotation>
-
-          </MapboxGL.MapView>
+          </MapboxGL.MapView>}
 
         </View>
       </View>
       
       <View style={styles.itemsContainer}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <ScrollView 
+          horizontal={true} 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{paddingHorizontal: 20}}
+        >
           {items.map((item)=> (
             <TouchableOpacity
               activeOpacity={0.5}
