@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, TouchableOpacity, Text, ScrollView, Image } from 'react-native'
+import { View, TouchableOpacity, Text, ScrollView, Image, PermissionsAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { useNavigation } from "@react-navigation/native"
 import MapboxGL from "@react-native-mapbox-gl/maps"
@@ -39,7 +39,8 @@ const Points = () => {
 
   useEffect(()=>{
     api.get('items').then((response)=>{
-      setItems(response.data)
+		console.log('response get items: ', response.data);
+		setItems(response.data)
     })
   }, [])
 
@@ -51,20 +52,41 @@ const Points = () => {
         items: [1, 2, 3, 4, 5, 6]
       }
     }).then((response)=>{
-      console.log('response.data: ', response.data);
+      console.log('response get points: ', response.data);
       
       setPoints(response.data)
     })
   }, [])
 
-  useEffect(()=>{
-    // const status = Geolocation.requestAuthorization()
-    // console.log(status);
-    
-    // Geolocation.getCurrentPosition(info => console.log(info));
 
+  useEffect(()=>{
+	async function permissionForLocation() {
+		return await PermissionsAndroid.check( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
+	}
+
+	if (!permissionForLocation()) {
+		requestLocationPermission()
+	}
   }, [])
 
+  const requestLocationPermission = async () => {
+	try {
+	  const granted = await PermissionsAndroid.request(
+		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+		{
+		  title: "Permissão para acessar sua localização",
+		  message:
+			"Precisamos acessar sua localização! " +
+			"Fique tranquilo, os sequestradores não irão demorar à chegar",
+		  buttonNeutral: "Pergunte-me depois",
+		  buttonNegative: "Cancelar",
+		  buttonPositive: "OK"
+		}
+	  )
+	} catch (err) {
+	  console.warn(err)
+	}
+  }
 
   function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex((item)=> item === id)
@@ -109,8 +131,15 @@ const Points = () => {
           >
             <MapboxGL.Camera 
               centerCoordinate={[-43.7971312, -20.6719389]}
-              zoomLevel={2}
+			  zoomLevel={2}
+			  followUserLocation={true}
             />
+
+            <MapboxGL.UserLocation
+				visible={true}
+				showsUserHeadingIndicator={true}
+			/>
+
             {points.map((point)=>(
               <MapboxGL.MarkerView
                 key={`${point.id}`}
