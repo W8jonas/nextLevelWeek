@@ -80,19 +80,19 @@ const Points = () => {
     })
   }, [])
 
-//   useEffect(()=>{
-//     api.get('points',{
-//       params: {
-//         city: 'Lafaiete',
-//         uf: "mg",
-//         items: [1, 2, 3, 4, 5, 6]
-//       }
-//     }).then((response)=>{
-//       console.log('response get points: ', response.data);
+  useEffect(()=>{
+    // api.get('points',{
+    //   params: {
+    //     city: 'Lafaiete',
+    //     uf: "mg",
+    //     items: [1, 2, 3, 4, 5, 6]
+    //   }
+    // }).then((response)=>{
+    //   console.log('response get points: ', response.data);
       
-//       setPoints(response.data)
-//     })
-//   }, [])
+    //   setPoints(response.data)
+    // })
+  }, [])
 
 
   useEffect(()=>{
@@ -167,7 +167,7 @@ const Points = () => {
           >
             <MapboxGL.Camera 
               centerCoordinate={[-43.7971312, -20.6719389]}
-			  zoomLevel={2}
+			  zoomLevel={80}
 			  followUserLocation={true}
             />
 
@@ -179,17 +179,19 @@ const Points = () => {
             {getPointsArrayFakeData.map((point)=>(
               <MapboxGL.MarkerView
                 key={`${point.id}`}
-                id={`${point.id}`}
+				id={`${point.id}`}
                 coordinate={[point.latitude, point.longitude]}
-                onSelected={()=>handleNavigateToDetail(point.id)}
               >
-
-                <View style={styles.mapMarkerContainer}>
-                  {/* <Image style={styles.mapMarkerImage} source={{uri: point.image}} /> */}
+				
+                <TouchableOpacity
+					style={styles.mapMarkerContainer}
+					onPress={()=>handleNavigateToDetail(point.id)}
+				>
+                  <Image style={styles.mapMarkerImage} source={{uri: point.image}} />
                   <Text style={styles.mapMarkerTitle}>
                     {point.name}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </MapboxGL.MarkerView>
             ))}
 

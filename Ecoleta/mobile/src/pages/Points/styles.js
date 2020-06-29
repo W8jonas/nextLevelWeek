@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 20,
       fontFamily: 'Ubuntu_700Bold',
-      marginTop: 24,
+      marginTop: 16,
     },
   
     description: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     itemsContainer: {
       flexDirection: 'row',
       marginTop: 16,
-      marginBottom: 32,
+      marginBottom: 22,
     },
   
     item: {
