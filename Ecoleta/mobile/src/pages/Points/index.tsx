@@ -27,6 +27,42 @@ interface Point {
   longitude: number,
 }
 
+const getPointsArrayFakeData = [
+	{
+	  "id": 1,
+	  "image": "https://images.unsplash.com/photo-1591567967940-93c1efc6765c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+	  "name": "Mercadinho Ranieri",
+	  "email": "Ranieri@gmail.com",
+	  "whatsapp": "31434992243",
+	  "city": "Lafaiete",
+	  "uf": "mg",
+	  "latitude": -43.7986785,
+	  "longitude": -20.6688576
+	},
+	{
+	  "id": 2,
+	  "image": "https://images.unsplash.com/photo-1591567967940-93c1efc6765c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+	  "name": "Clube Dom Pedro2",
+	  "email": "DomPedro2@gmail.com",
+	  "whatsapp": "31434992243",
+	  "city": "Lafaiete",
+	  "uf": "mg",
+	  "latitude": -43.7985712,
+	  "longitude": -20.6675476
+	},
+	{
+	  "id": 3,
+	  "image": "https://images.unsplash.com/photo-1591567967940-93c1efc6765c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80",
+	  "name": "Mercadão das Madeiras",
+	  "email": "mercadao@madeiras.com",
+	  "whatsapp": "315623474",
+	  "city": "Lafaiete",
+	  "uf": "mg",
+	  "latitude": -43.8018231,
+	  "longitude": -20.6698131
+	}
+]
+
 const Points = () => {
   const navigation = useNavigation()
 
@@ -44,19 +80,19 @@ const Points = () => {
     })
   }, [])
 
-  useEffect(()=>{
-    api.get('points',{
-      params: {
-        city: 'lafaiete',
-        uf: "mg",
-        items: [1, 2, 3, 4, 5, 6]
-      }
-    }).then((response)=>{
-      console.log('response get points: ', response.data);
+//   useEffect(()=>{
+//     api.get('points',{
+//       params: {
+//         city: 'Lafaiete',
+//         uf: "mg",
+//         items: [1, 2, 3, 4, 5, 6]
+//       }
+//     }).then((response)=>{
+//       console.log('response get points: ', response.data);
       
-      setPoints(response.data)
-    })
-  }, [])
+//       setPoints(response.data)
+//     })
+//   }, [])
 
 
   useEffect(()=>{
@@ -140,16 +176,16 @@ const Points = () => {
 				showsUserHeadingIndicator={true}
 			/>
 
-            {points.map((point)=>(
+            {getPointsArrayFakeData.map((point)=>(
               <MapboxGL.MarkerView
                 key={`${point.id}`}
-                id='rocketseat'
+                id={`${point.id}`}
                 coordinate={[point.latitude, point.longitude]}
                 onSelected={()=>handleNavigateToDetail(point.id)}
               >
 
                 <View style={styles.mapMarkerContainer}>
-                  <Image style={styles.mapMarkerImage} source={{uri: point.image}} />
+                  {/* <Image style={styles.mapMarkerImage} source={{uri: point.image}} /> */}
                   <Text style={styles.mapMarkerTitle}>
                     {point.name}
                   </Text>
