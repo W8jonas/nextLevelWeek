@@ -6,6 +6,8 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import styles from './styles'
 import { RectButton } from 'react-native-gesture-handler'
 import api from '../../services/api'
+import Mailer from 'react-native-mail'
+
 
 interface Params {
   point_id: number
@@ -42,15 +44,33 @@ const Detail = () => {
   }, [])
 
   useEffect(()=>{}, [])
-    
+  
   function handleNavigateBack() {
     navigation.goBack()
   }
 
+  function handleEmail() {
+    Mailer.mail({
+      subject: 'Interesse na coleta de resíduos',
+      recipients: [data.point.email],
+    }, (error, event) => {
+      Alert.alert(
+        error,
+        event,
+        [
+          {text: 'Ok', onPress: () => console.log('OK: Email Error Response')},
+          {text: 'Cancel', onPress: () => console.log('CANCEL: Email Error Response')}
+        ],
+        { cancelable: true }
+      )
+    })
+  }
+
   if (!data.point){
     return (
-      <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{flex:1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size={'large'}/>
+        <Text>Carregando</Text>
       </View>
     )
   }
@@ -82,7 +102,7 @@ const Detail = () => {
           <Text style={styles.buttonText}>whatsapp</Text>
         </RectButton>
 
-        <RectButton style={styles.button} onPress={()=>{}}>
+        <RectButton style={styles.button} onPress={()=>{handleEmail()}}>
           <Icon2 name="mail" size={20} color="#fff" />
           <Text style={styles.buttonText}>E-mail</Text>
         </RectButton>
