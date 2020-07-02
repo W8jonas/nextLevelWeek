@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { View, TouchableOpacity, Text, ScrollView, Image, PermissionsAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import MapboxGL from "@react-native-mapbox-gl/maps"
 import { SvgUri } from "react-native-svg"
 import styles from "./styles"
@@ -25,6 +25,10 @@ interface Point {
   image: string,
   latitude: number,
   longitude: number,
+}
+interface Params {
+  uf: string
+  city: string
 }
 
 const getPointsArrayFakeData = [
@@ -65,12 +69,14 @@ const getPointsArrayFakeData = [
 
 const Points = () => {
   const navigation = useNavigation()
+  const route = useRoute()
 
   const [items, setItems] = useState<Item[]>([])
   const [points, setPoints] = useState<Point[]>([])
 
+  const routeParams = route.params as Params
+
   const [selectedItems, setSelectedItems] = useState<number[]>([])
-  
   const [initialPosition, setInitialPosition] = useState<number[]>([1, 0])
 
   useEffect(()=>{
@@ -81,18 +87,18 @@ const Points = () => {
   }, [])
 
   useEffect(()=>{
-    // api.get('points',{
-    //   params: {
-    //     city: 'Lafaiete',
-    //     uf: "mg",
-    //     items: [1, 2, 3, 4, 5, 6]
-    //   }
-    // }).then((response)=>{
-    //   console.log('response get points: ', response.data);
+    api.get('points',{
+      params: {
+        city: routeParams.city,
+        uf: routeParams.uf,
+        items: selectedItems
+      }
+    }).then((response)=>{
+      console.log('response get points: ', response.data);
       
-    //   setPoints(response.data)
-    // })
-  }, [])
+      setPoints(response.data)
+    })
+  }, [selectedItems])
 
 
   useEffect(()=>{
