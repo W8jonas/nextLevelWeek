@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, TouchableOpacity, Image, Text, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, Image, Text, ActivityIndicator, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import Icon2 from 'react-native-vector-icons/FontAwesome'
 import { useNavigation, useRoute } from "@react-navigation/native"
@@ -64,6 +64,11 @@ const Detail = () => {
         { cancelable: true }
       )
     })
+  }
+
+  function handleWhatsapp() {
+    const text = 'Tenho interesse sobre coleta de resíduos'
+    Linking.openURL(`whatsapp://send?phone=${data.point.whatsapp}&text=${text}`)
   }
 
   if (!data.point){
