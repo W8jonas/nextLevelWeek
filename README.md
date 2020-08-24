@@ -1,13 +1,13 @@
 # Repositorios Next Level Week
 
 # Ecoleta
--[x] server
+- [x] server
 
--[x] web
+- [x] web
 
--[x] mobile
+- [x] mobile
 
--[ ] funcionalidade avançadas
+- [ ] funcionalidade avançadas
 
 ## Repositório movido para repositório de estudos:
 
